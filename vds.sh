@@ -6,7 +6,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-HOST=https://raw.githubusercontent.com/Erdenian/Ubuntu-VDS-installer/master
+HOST=https://raw.githubusercontent.com/Erdenian/Installers/master
 
 function download_from_host() {
     wget -O $1 $HOST/$1
