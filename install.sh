@@ -14,7 +14,7 @@ function download_from_host() {
 }
 
 function color_echo() {
-    echo -e "\e[32m$1"
+    echo -e "\e[32m$1\e[0m"
 }
 
 color_echo "Ugrading pachages"
@@ -46,7 +46,7 @@ apt install -y apache2
 a2enmod proxy
 a2enmod proxy_http
 
-a2dissite jenkins
+a2dissite jenkins || true
 download_from_host jenkins.conf /etc/apache2/sites-available/jenkins.conf
 a2ensite jenkins
 
