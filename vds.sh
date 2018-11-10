@@ -17,7 +17,7 @@ function color_echo() {
     echo -e "\e[32m$1\e[0m"
 }
 
-color_echo 'Ugrading pachages...'
+color_echo 'Ugrading packages...'
 apt update
 apt full-upgrade -y
 
@@ -38,7 +38,7 @@ wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | apt-key add -
 echo 'deb http://pkg.jenkins.io/debian-stable binary/' > /etc/apt/sources.list.d/jenkins.list
 # postgresql
 curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-echo 'deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main' > /etc/apt/sources.list.d/pgdg.list
+echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 apt update
 
 color_echo 'Installing git...'
@@ -56,10 +56,8 @@ color_echo 'Installing Apache...'
 apt install -y apache2
 a2enmod proxy
 a2enmod proxy_http
-
+# jenkins site
 a2dissite jenkins || true
 download_from_host jenkins.conf /etc/apache2/sites-available/jenkins.conf
 a2ensite jenkins
-
 apache2ctl restart
-
