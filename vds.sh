@@ -53,9 +53,13 @@ download_from_host jenkins /etc/default/jenkins
 color_echo 'Installing PostgreSQL...'
 apt install -y postgresql
 sed -i -e "s/#listen_addresses = 'localhost'/listen_addresses = '*'\t/g" /etc/postgresql/$POSTGRESQL_VERSION/main/postgresql.conf
-echo 'host     all             all             0.0.0.0/0               md5' >> /etc/postgresql/$POSTGRESQL_VERSION/main/pg_hba.conf
-echo 'host     all             all             ::/0                    md5' >> /etc/postgresql/$POSTGRESQL_VERSION/main/pg_hba.conf
-sudo -u postgres psql --command '\password'
+echo <<EOT >> /etc/postgresql/$POSTGRESQL_VERSION/main/pg_hba.conf
+# Allow all connections
+host    all             all             0.0.0.0/0               md5
+host    all             all             ::/0                    md5
+EOT
+color_echo 'Enter new posrgres user password'
+sudo -u postgres psql --command '\password' || color_echo 'Set correct password later'
 /etc/init.d/postgresql restart
 
 color_echo 'Installing Apache...'
