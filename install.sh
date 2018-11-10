@@ -26,15 +26,14 @@ apt update
 apt install -y jenkins
 wget https://raw.githubusercontent.com/Erdenian/Ubuntu-VDS-installer/master/jenkins
 mv jenkins /etc/default/jenkins
+/etc/init.d/jenkins restart
 
 # apache2
 apt install -y apache2
 a2enmod proxy
 a2enmod proxy_http
-
 wget https://raw.githubusercontent.com/Erdenian/Ubuntu-VDS-installer/master/jenkins.conf
 mv jenkins.conf /etc/apache2/sites-available/jenkins.conf
-
 a2ensite jenkins
 apache2ctl restart
 
