@@ -11,7 +11,7 @@ apt full-upgrade -y
 apt install -y language-pack-ru
 update-locale LANG=ru_RU.UTF-8
 
-apt install -y openjdk-8-jdk openjfx apache2
+apt install -y openjdk-8-jdk openjfx apache2 wget
 
 # git
 apt install -y software-properties-common
@@ -24,5 +24,6 @@ wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | apt-key add -
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 apt update
 apt install -y jenkins
-# настроить listenAddress
+wget https://raw.githubusercontent.com/Erdenian/Ubuntu-VDS-installer/master/jenkins
+mv jenkins /etc/default/jenkins
 
