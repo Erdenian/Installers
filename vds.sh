@@ -17,7 +17,7 @@ function download_from_host() {
 }
 
 function setup_site() {
-    download_from_host $1.conf /etc/apache2/sites-available/$1.conf
+    download_from_host $1.conf /etc/apache2/sites-available/
     a2ensite $1
 }
 
@@ -54,7 +54,7 @@ apt install -y git
 
 color_echo 'Installing Jenkins...'
 apt install -y jenkins
-download_from_host jenkins /etc/default/jenkins
+download_from_host jenkins /etc/default/
 /etc/init.d/jenkins restart
 
 color_echo 'Installing PostgreSQL...'
@@ -76,12 +76,12 @@ source bin/activate
 pip3 install wheel flask
 wget $PGADMIN_LINK
 pip3 install pgadmin4*.whl
-download_from_host config_local.py lib/python$PYTHON_VERSION/site-packages/pgadmin4/config_local.py
-#sed -i -e "s/DEFAULT_SERVER = '127.0.0.1'/DEFAULT_SERVER = '0.0.0.0'\t/g" /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/config.py
-#echo 'SERVER_MODE = True' >> /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/config.py
-#python3 lib/python$PYTHON_VERSION/site-packages/pgadmin4/pgAdmin4.py
 deactivate
 cd -
+download_from_host config_local.py /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/
+download_from_host pgadmin4.service /etc/systemd/system/
+adduser pgadmin --disabled-password --gecos '' || True
+chown -R pgadmin /opt/pgadmin4
 
 color_echo 'Installing Apache...'
 apt install -y apache2
@@ -94,3 +94,13 @@ apache2ctl restart
 color_echo 'Post installation interaction...'
 color_echo 'Enter new posrgres user password'
 sudo -u postgres psql --command '\password' || color_echo 'Set correct password later'
+
+color_echo 'initialAdminPassword for Jenkins:'
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+color_echo 'pgadmin4 initial setup...'
+color_echo "Cancel execution after email and password setup and run 'systemctl enable pgadmin4'"
+sudo -u pgadmin -s -- <<EOF
+PATH=/opt/pgadmin4/bin
+/opt/pgadmin4/bin/python3 /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/pgAdmin4.py
+EOF
