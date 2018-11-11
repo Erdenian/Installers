@@ -8,11 +8,17 @@ fi
 
 HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/vds
 POSTGRESQL_VERSION=11
+PYTHON_VERSION=3.6
 PGADMIN_LINK=https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v3.5/pip/pgadmin4-3.5-py2.py3-none-any.whl
 
 function download_from_host() {
     wget -O $1 $HOST/$1
     mv $1 $2
+}
+
+function setup_site() {
+    download_from_host $1.conf /etc/apache2/sites-available/$1.conf
+    a2ensite $1
 }
 
 function color_echo() {
@@ -64,15 +70,16 @@ EOT
 color_echo 'Installing pgadmin4...'
 apt install -y python3-dev python3-venv python3-pip libpq-dev
 rm -rf /opt/pgadmin4
-python3.6 -m venv /opt/pgadmin4
+python$PYTHON_VERSION -m venv /opt/pgadmin4
 cd /opt/pgadmin4/
 source bin/activate
 pip3 install wheel flask
 wget $PGADMIN_LINK
 pip3 install pgadmin4*.whl
-#sed -i -e "s/DEFAULT_SERVER = '127.0.0.1'/DEFAULT_SERVER = '0.0.0.0'\t/g" /opt/pgadmin4/lib/python3.6/site-packages/pgadmin4/config.py
-#echo 'SERVER_MODE = True' >> /opt/pgadmin4/lib/python3.6/site-packages/pgadmin4/config.py
-#python3 lib/python3.6/site-packages/pgadmin4/setup.py
+download_from_host config_local.py lib/python$PYTHON_VERSION/site-packages/pgadmin4/config_local.py
+#sed -i -e "s/DEFAULT_SERVER = '127.0.0.1'/DEFAULT_SERVER = '0.0.0.0'\t/g" /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/config.py
+#echo 'SERVER_MODE = True' >> /opt/pgadmin4/lib/python$PYTHON_VERSION/site-packages/pgadmin4/config.py
+#python3 lib/python$PYTHON_VERSION/site-packages/pgadmin4/pgAdmin4.py
 deactivate
 cd -
 
@@ -80,9 +87,8 @@ color_echo 'Installing Apache...'
 apt install -y apache2
 a2enmod proxy
 a2enmod proxy_http
-# jenkins site
-download_from_host jenkins.conf /etc/apache2/sites-available/jenkins.conf
-a2ensite jenkins
+setup_site jenkins
+setup_site pgadmin
 apache2ctl restart
 
 color_echo 'Post installation interaction...'
