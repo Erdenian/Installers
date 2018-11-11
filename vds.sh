@@ -62,17 +62,18 @@ EOT
 /etc/init.d/postgresql restart
 
 color_echo 'Installing pgadmin4...'
-apt install -y python-dev python-pip libpq-dev virtualenv
+apt install -y python3-dev python3-venv python3-pip libpq-dev
 rm -rf /opt/pgadmin4
-virtualenv /opt/pgadmin4
+python3.6 -m venv /opt/pgadmin4
 cd /opt/pgadmin4/
 source bin/activate
 pip3 install wheel flask
 wget $PGADMIN_LINK
 pip3 install pgadmin4*.whl
-#sed -i -e "s/DEFAULT_SERVER = '127.0.0.1'/DEFAULT_SERVER = '0.0.0.0'\t/g" /opt/pgadmin4/lib/python2.7/site-packages/pgadmin4/config.py
-#echo 'SERVER_MODE = True' >> /opt/pgadmin4/lib/python2.7/site-packages/pgadmin4/config.py
-#python3 lib/python2.7/site-packages/pgadmin4/setup.py
+#sed -i -e "s/DEFAULT_SERVER = '127.0.0.1'/DEFAULT_SERVER = '0.0.0.0'\t/g" /opt/pgadmin4/lib/python3.6/site-packages/pgadmin4/config.py
+#echo 'SERVER_MODE = True' >> /opt/pgadmin4/lib/python3.6/site-packages/pgadmin4/config.py
+#python3 lib/python3.6/site-packages/pgadmin4/setup.py
+deactivate
 cd -
 
 color_echo 'Installing Apache...'
