@@ -29,6 +29,13 @@ color_echo 'Ugrading packages...'
 apt update
 apt full-upgrade -y
 
+color_echo 'Creating swap file...'
+fallocate -l 4G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
 color_echo 'Installing russian locale...'
 apt install -y language-pack-ru
 update-locale LANG=ru_RU.UTF-8
