@@ -95,7 +95,6 @@ apt install -y apache2
 a2enmod proxy
 a2enmod proxy_http
 setup_site jenkins
-setup_site postgresql
 setup_site pgadmin
 apache2ctl restart
 
