@@ -41,7 +41,7 @@ apt install -y language-pack-ru
 update-locale LANG=ru_RU.UTF-8
 
 color_echo 'Installing common packages...'
-apt install -y openjdk-8-jdk openjfx wget
+apt install -y openjdk-8-jdk openjfx wget fail2ban
 apt install -y software-properties-common # contains add-apt-repository
 apt install -y ca-certificates # for postgresql apt
 apt install -y sed # for postgresql setup
@@ -104,6 +104,13 @@ sudo -u postgres psql --command '\password' || color_echo 'Set correct password 
 
 color_echo 'initialAdminPassword for Jenkins:'
 cat /var/lib/jenkins/secrets/initialAdminPassword
+
+adduser erdenian
+adduser erdenian sudo
+cat <<EOT >> /etc/ssh/sshd_config
+DenyUsers root
+PermitEmptyPasswords no
+EOT
 
 color_echo 'pgadmin4 initial setup...'
 color_echo "Cancel execution after email and password setup and run 'systemctl enable pgadmin4'"
