@@ -61,7 +61,7 @@ MAXOPENFILES=8192
 
 # port for HTTP connector (default 8080; disable with -1)
 HTTP_PORT=8080
-HTPP_HOST=127.0.0.1
+HTTP_HOST=127.0.0.1
 
 # servlet context, important if you want to use apache proxying
 PREFIX=/$NAME
