@@ -9,7 +9,7 @@ fi
 HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/vds
 POSTGRESQL_VERSION=11
 PYTHON_VERSION=3.6
-PGADMIN_LINK=https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v3.5/pip/pgadmin4-3.5-py2.py3-none-any.whl
+PGADMIN_LINK=https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v3.6/pip/pgadmin4-3.6-py2.py3-none-any.whl
 
 function download_from_host() {
     wget -O $1 $HOST/$1
