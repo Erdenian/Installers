@@ -55,8 +55,14 @@ wget -q -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key a
 echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 # git
 add-apt-repository -y ppa:git-core/ppa
+# openjdk
+add-apt-repository -y ppa:openjdk-r/ppa
 
-color_echo 'Installing git...'
+color_echo 'Installing OpenJDK...
+apt install -y openjdk-11-jdk openjfx
+apt install -y openjdk-8-jdk # Jenkins doesn's support Java 11, 8 will be set as default
+
+color_echo 'Installing Git...'
 apt install -y git
 
 color_echo 'Installing Jenkins...'
@@ -74,7 +80,7 @@ host    all             all             ::/0                    md5
 EOT
 /etc/init.d/postgresql restart
 
-color_echo 'Installing pgadmin4...'
+color_echo 'Installing pgAdmin4...'
 apt install -y python3-dev python3-venv python3-pip libpq-dev
 rm -rf /opt/pgadmin4
 python$PYTHON_VERSION -m venv /opt/pgadmin4
@@ -112,7 +118,7 @@ DenyUsers root
 PermitEmptyPasswords no
 EOT
 
-color_echo 'pgadmin4 initial setup...'
+color_echo 'pgAdmin4 initial setup...'
 color_echo "Cancel execution after email and password setup and run 'systemctl enable pgadmin4'"
 sudo -u pgadmin -s -- <<EOF
 PATH=/opt/pgadmin4/bin
