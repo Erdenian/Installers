@@ -41,7 +41,7 @@ apt install -y language-pack-ru
 update-locale LANG=ru_RU.UTF-8
 
 color_echo 'Installing common packages...'
-apt install -y openjdk-8-jdk openjfx wget fail2ban
+apt install -y wget fail2ban
 apt install -y software-properties-common # contains add-apt-repository
 apt install -y ca-certificates # for postgresql apt
 apt install -y sed # for postgresql setup
