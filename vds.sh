@@ -50,9 +50,9 @@ add-apt-repository -y ppa:git-core/ppa
 # openjdk
 add-apt-repository -y ppa:openjdk-r/ppa
 
-color_echo 'Installing OpenJDK...
+color_echo 'Installing OpenJDK...'
 apt install -y openjdk-12-jdk
-apt install -y openjdk-8-jdk # Jenkins doesn's support Java 12, 8 will be set as default
+apt install -y openjdk-8-jdk # Jenkins doesn't support Java 12, 8 will be set as default
 
 color_echo 'Installing Git...'
 apt install -y git
