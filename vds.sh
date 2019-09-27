@@ -53,6 +53,7 @@ add-apt-repository -y ppa:openjdk-r/ppa
 color_echo 'Installing OpenJDK...'
 apt install -y openjdk-8-jdk # Jenkins doesn't support Java 12, 8 will be set as default
 apt install -y openjdk-12-jdk
+update-java-alternatives --set java-1.8.0-openjdk-amd64
 
 color_echo 'Installing Git...'
 apt install -y git
