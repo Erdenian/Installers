@@ -7,6 +7,10 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/vds
+ANDROID_SDK_TOOLS_LINK=https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+ANDROID_SDK_HOME=/opt/android
+ANDROID_SDK_ROOT=$ANDROID_SDK_HOME/sdk
+GRADLE_USER_HOME=/opt/gradle
 
 function download_from_host() {
     wget -O $1 $HOST/$1
@@ -40,6 +44,7 @@ update-locale LANG=ru_RU.UTF-8
 color_echo 'Installing common packages...'
 apt install -y wget fail2ban
 apt install -y software-properties-common # contains add-apt-repository
+apt install -y unzip # to unzip android sdk
 
 color_echo 'Adding repositories...'
 # jenkins
@@ -69,6 +74,20 @@ a2enmod proxy
 a2enmod proxy_http
 setup_site jenkins
 apache2ctl restart
+
+color_echo 'Installing Android SDK...'
+wget -O android-sdk-tools.zip $ANDROID_SDK_TOOLS_LINK
+mkdir -p $ANDROID_SDK_ROOT
+unzip android-sdk-tools.zip -d $ANDROID_SDK_ROOT
+chmod -R 777 $ANDROID_SDK_ROOT
+rm android-sdk-tools.zip
+echo "ANDROID_SDK_HOME=$ANDROID_SDK_HOME" | sudo tee -a /etc/environment > /dev/null
+echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" | sudo tee -a /etc/environment > /dev/null
+
+color_echo 'Installing Gradle...'
+mkdir -p $GRADLE_USER_HOME
+chmod -R 777 $GRADLE_USER_HOME
+echo "GRADLE_USER_HOME=$GRADLE_USER_HOME" | sudo tee -a /etc/environment > /dev/null
 
 color_echo 'Post installation interaction...'
 
