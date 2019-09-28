@@ -11,7 +11,6 @@ HOSTNAME=vds.erdenian.ru
 ANDROID_SDK_TOOLS_LINK=https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
 ANDROID_SDK_HOME=/opt/android
 ANDROID_SDK_ROOT=$ANDROID_SDK_HOME/sdk
-GRADLE_USER_HOME=/opt/gradle
 
 function download_from_host() {
     wget -O $1 $HOST/$1
@@ -89,11 +88,6 @@ yes | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --licenses > /dev/null
 set -o pipefail
 echo "ANDROID_SDK_HOME=$ANDROID_SDK_HOME" >> /etc/environment
 echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> /etc/environment
-
-color_echo 'Installing Gradle...'
-mkdir -p $GRADLE_USER_HOME
-chmod -R 777 $GRADLE_USER_HOME
-echo "GRADLE_USER_HOME=$GRADLE_USER_HOME" >> /etc/environment
 
 color_echo 'Post installation interaction...'
 
