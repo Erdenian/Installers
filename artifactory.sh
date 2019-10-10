@@ -6,11 +6,22 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/artifactory
 HOSTNAME=artifactory.geniepay.io
 ARTIFACTORY_URL=https://bintray.com/artifact/download/jfrog/artifactory-debs/pool/main/j/jfrog-artifactory-oss-deb/jfrog-artifactory-oss-6.13.1.deb
 
 function color_echo() {
     echo -e "\e[32m$1\e[0m"
+}
+
+function download_from_host() {
+    wget -O $1 $HOST/$1
+    mv $1 $2
+}
+
+function setup_site() {
+    download_from_host $1.conf /etc/apache2/sites-available/
+    a2ensite $1
 }
 
 color_echo 'Setting hostname...'
@@ -37,6 +48,7 @@ apt install -y software-properties-common # contains add-apt-repository
 
 color_echo 'Installing OpenJDK...'
 add-apt-repository -y ppa:openjdk-r/ppa
+apt update
 apt install -y openjdk-11-jdk
 
 color_echo 'Installing Artifactory OSS...'
@@ -49,7 +61,14 @@ gpg --keyserver pgpkeys.mit.edu --recv-key 6B219DCCD7639232
 gpg -a --export 6B219DCCD7639232 | apt-key add -
 apt update
 dpkg -i artifactory.deb
-service artifactory start
+# service artifactory start
+
+color_echo 'Installing Apache...'
+apt install -y apache2
+a2enmod proxy
+a2enmod proxy_http
+setup_site artifactory
+apache2ctl restart
 
 color_echo 'Post installation interaction...'
 adduser erdenian
