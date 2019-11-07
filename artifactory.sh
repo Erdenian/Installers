@@ -8,7 +8,7 @@ fi
 
 HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/artifactory
 HOSTNAME=artifactory.geniepay.io
-ARTIFACTORY_URL=https://bintray.com/artifact/download/jfrog/artifactory-debs/pool/main/j/jfrog-artifactory-oss-deb/jfrog-artifactory-oss-6.13.1.deb
+ARTIFACTORY_URL=https://bintray.com/artifact/download/jfrog/artifactory-debs/pool/main/j/jfrog-artifactory-oss-deb/jfrog-artifactory-oss-6.14.0.deb
 
 function color_echo() {
     echo -e "\e[32m$1\e[0m"
