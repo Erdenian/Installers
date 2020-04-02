@@ -8,7 +8,6 @@ fi
 
 HOST=https://raw.githubusercontent.com/Erdenian/Installers/master/artifactory
 HOSTNAME=artifactory.geniepay.io
-ARTIFACTORY_URL=https://bintray.com/artifact/download/jfrog/artifactory-debs/pool/main/j/jfrog-artifactory-oss-deb/jfrog-artifactory-oss-6.16.0.deb
 
 function color_echo() {
     echo -e "\e[32m$1\e[0m"
@@ -32,7 +31,8 @@ apt update
 apt full-upgrade -y
 
 color_echo 'Creating swap file...'
-fallocate -l 4G /swapfile
+swapoff /swapfile
+fallocate -l 2G /swapfile
 chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
@@ -52,16 +52,11 @@ apt update
 apt install -y openjdk-11-jdk
 
 color_echo 'Installing Artifactory OSS...'
-# echo 'deb https://jfrog.bintray.com/artifactory-debs bionic main' > /etc/apt/sources.list
-# curl https://bintray.com/user/downloadSubjectPublicKey?username=jfrog | apt-key add -
-# apt update
-# apt install jfrog-artifactory-oss
-wget -O artifactory.deb $ARTIFACTORY_URL
-gpg --keyserver pgpkeys.mit.edu --recv-key 6B219DCCD7639232 
-gpg -a --export 6B219DCCD7639232 | apt-key add -
+wget -qO - https://api.bintray.com/orgs/jfrog/keys/gpg/public.key | apt-key add -
+echo "deb https://jfrog.bintray.com/artifactory-debs bionic main" | tee -a /etc/apt/sources.list
 apt update
-dpkg -i artifactory.deb
-# service artifactory start
+apt install -y jfrog-artifactory-oss
+service artifactory start
 
 color_echo 'Installing Apache...'
 apt install -y apache2
